@@ -11,5 +11,8 @@
         "psr-4": {
             "PragmaGoTech\\Interview\\": "src/"
         }
+    },
+    "require": {
+        "php": "^7.4"
     }
 }
