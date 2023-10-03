@@ -6,6 +6,7 @@ namespace PragmaGoTech\Interview\Tests;
 
 use PHPUnit\Framework\TestCase;
 use PragmaGoTech\Interview\LoanFeeCalculator;
+use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
 use PragmaGoTech\Interview\Model\LoanProposal;
 
 /**
@@ -17,7 +18,9 @@ class LoanFeeCalculatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loanFeeCalculator = new LoanFeeCalculator();
+        $this->loanFeeCalculator = new LoanFeeCalculator(
+            new LoanFeeBreakpointRepository(),
+        );
     }
 
     /**
@@ -64,6 +67,8 @@ class LoanFeeCalculatorTest extends TestCase
             [12, 19000.00, 380.00],
             [12, 20000.00, 400.00],
             [24,  1000.00,  70.00],
+            [24,  1001.00,  74.00],
+            [24,  1001.50,  73.50],
             [24,  2000.00, 100.00],
             [24,  3000.00, 120.00],
             [24,  4000.00, 160.00],
