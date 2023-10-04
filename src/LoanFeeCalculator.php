@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace PragmaGoTech\Interview;
 
+use Brick\Math\RoundingMode;
+use Brick\Money\Money;
 use LogicException;
 use PragmaGoTech\Interview\Model\LoanProposal;
 use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
 
 use function array_filter;
-use function ceil;
 use function iterator_to_array;
 use function is_array;
 use function sprintf;
@@ -25,7 +26,7 @@ class LoanFeeCalculator implements FeeCalculator
         $this->loanFeeBreakpointRepository = $loanFeeBreakpointRepository;
     }
 
-    public function calculate(LoanProposal $application): float
+    public function calculate(LoanProposal $application): Money
     {
         $breakpoints = self::getSeries(
             $application->term(),
@@ -61,12 +62,12 @@ class LoanFeeCalculator implements FeeCalculator
         return $breakpoints;
     }
 
-    private static function interpolate(LoanProposal $application, LoanFeeBreakpoint ...$breakpointSeries): float
+    private static function interpolate(LoanProposal $application, LoanFeeBreakpoint ...$breakpointSeries): Money
     {
         $amount = $application->amount();
 
         foreach ($breakpointSeries as $breakpoint) {
-            if ($breakpoint->amount() <= $amount) {
+            if ($breakpoint->amount()->isLessThanOrEqualTo($amount)) {
                 $left = $breakpoint;
             } else {
                 $right = $breakpoint;
@@ -88,17 +89,27 @@ class LoanFeeCalculator implements FeeCalculator
             return $left->fee();
         }
 
-        $amountDelta = $right->amount() - $left->amount();
-        $feeDelta = $right->fee() - $left->fee();
+        $amountStep = $right->amount()->minus($left->amount());
+        $feeStep = $right->fee()->minus($left->fee());
+        $amountDelta = $amount->minus($left->amount());
+        $coefficient = $feeStep->getAmount()->toBigRational()->dividedBy($amountStep->getAmount()->toBigRational());
+        $feeDelta = $amountDelta->multipliedBy($coefficient, RoundingMode::HALF_EVEN);
 
-        return $left->fee() + ($amount - $left->amount()) * $feeDelta / $amountDelta;
+        return $left->fee()->plus($feeDelta);
     }
 
-    private static function round(float $fee, float $amount): float
+    private static function round(Money $fee, Money $amount): Money
     {
-        $total = $amount + $fee;
-        $totalRoundedUp = ceil($total / 5) * 5;
-        $fee = $totalRoundedUp - $amount;
+        $total = $amount->plus($fee);
+
+        $totalRoundedUpAmount = $total->getAmount()
+            ->toBigRational()
+            ->dividedBy(5)
+            ->toScale(0, RoundingMode::UP)
+            ->multipliedBy(5);
+        $totalRoundedUp = Money::create($totalRoundedUpAmount, $total->getCurrency(), $total->getContext());
+
+        $fee = $totalRoundedUp->minus($amount);
 
         return $fee;
     }

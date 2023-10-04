@@ -120,3 +120,5 @@ The fee structure doesn't follow particular algorithm and it is possible that sa
   `LoanFeeStructure`. It would guarantee breakpoint uniqueness by providing a
   duplicate-safe `addBreakpoint` method. The calculator would then retrieve
   appropriate structure for given proposal and iterate on its breakpoints.
+
+- Never use floating point arithmetic for money calculations.

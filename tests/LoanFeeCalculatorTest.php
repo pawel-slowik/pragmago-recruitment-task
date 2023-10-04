@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PragmaGoTech\Interview\Tests;
 
+use Brick\Money\Money;
 use PHPUnit\Framework\TestCase;
 use PragmaGoTech\Interview\LoanFeeCalculator;
 use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
@@ -26,7 +27,7 @@ class LoanFeeCalculatorTest extends TestCase
     /**
      * @dataProvider calculatedFeeDataProvider
      */
-    public function testCalculatedFee(int $term, float $amount, float $expectedFee): void
+    public function testCalculatedFee(int $term, Money $amount, Money $expectedFee): void
     {
         $proposal = $this->createStub(LoanProposal::class);
         $proposal->method('term')->willReturn($term);
@@ -34,61 +35,64 @@ class LoanFeeCalculatorTest extends TestCase
 
         $calculatedFee = $this->loanFeeCalculator->calculate($proposal);
 
-        $this->assertSame($expectedFee, $calculatedFee);
+        $this->assertTrue($calculatedFee->isEqualTo($expectedFee));
     }
 
     /**
-     * @return array<array{0: int, 1: float, 2: float}>
+     * @return array<array{0: int, 1: Money, 2: Money}>
      */
     public function calculatedFeeDataProvider(): array
     {
+        // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
+        // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket
         return [
-            [24, 11500.00, 460.00],
-            [12, 19250.00, 385.00],
-            [24,  2750.00, 115.00],
-            [12,  1000.00,  50.00],
-            [12,  2000.00,  90.00],
-            [12,  3000.00,  90.00],
-            [12,  4000.00, 115.00],
-            [12,  5000.00, 100.00],
-            [12,  6000.00, 120.00],
-            [12,  7000.00, 140.00],
-            [12,  8000.00, 160.00],
-            [12,  9000.00, 180.00],
-            [12, 10000.00, 200.00],
-            [12, 11000.00, 220.00],
-            [12, 12000.00, 240.00],
-            [12, 13000.00, 260.00],
-            [12, 14000.00, 280.00],
-            [12, 15000.00, 300.00],
-            [12, 16000.00, 320.00],
-            [12, 17000.00, 340.00],
-            [12, 18000.00, 360.00],
-            [12, 19000.00, 380.00],
-            [12, 20000.00, 400.00],
-            [24,  1000.00,  70.00],
-            [24,  1001.00,  74.00],
-            [24,  1001.50,  73.50],
-            [24,  1001.51,  73.49],
-            [24,  2000.00, 100.00],
-            [24,  3000.00, 120.00],
-            [24,  4000.00, 160.00],
-            [24,  5000.00, 200.00],
-            [24,  6000.00, 240.00],
-            [24,  7000.00, 280.00],
-            [24,  8000.00, 320.00],
-            [24,  9000.00, 360.00],
-            [24, 10000.00, 400.00],
-            [24, 11000.00, 440.00],
-            [24, 12000.00, 480.00],
-            [24, 13000.00, 520.00],
-            [24, 14000.00, 560.00],
-            [24, 15000.00, 600.00],
-            [24, 16000.00, 640.00],
-            [24, 17000.00, 680.00],
-            [24, 18000.00, 720.00],
-            [24, 19000.00, 760.00],
-            [24, 20000.00, 800.00],
+            [24, Money::of('11500.00', 'PLN'), Money::of('460.00', 'PLN')],
+            [12, Money::of('19250.00', 'PLN'), Money::of('385.00', 'PLN')],
+            [24, Money::of( '2750.00', 'PLN'), Money::of('115.00', 'PLN')],
+            [12, Money::of( '1000.00', 'PLN'), Money::of( '50.00', 'PLN')],
+            [12, Money::of( '2000.00', 'PLN'), Money::of( '90.00', 'PLN')],
+            [12, Money::of( '3000.00', 'PLN'), Money::of( '90.00', 'PLN')],
+            [12, Money::of( '4000.00', 'PLN'), Money::of('115.00', 'PLN')],
+            [12, Money::of( '5000.00', 'PLN'), Money::of('100.00', 'PLN')],
+            [12, Money::of( '6000.00', 'PLN'), Money::of('120.00', 'PLN')],
+            [12, Money::of( '7000.00', 'PLN'), Money::of('140.00', 'PLN')],
+            [12, Money::of( '8000.00', 'PLN'), Money::of('160.00', 'PLN')],
+            [12, Money::of( '9000.00', 'PLN'), Money::of('180.00', 'PLN')],
+            [12, Money::of('10000.00', 'PLN'), Money::of('200.00', 'PLN')],
+            [12, Money::of('11000.00', 'PLN'), Money::of('220.00', 'PLN')],
+            [12, Money::of('12000.00', 'PLN'), Money::of('240.00', 'PLN')],
+            [12, Money::of('13000.00', 'PLN'), Money::of('260.00', 'PLN')],
+            [12, Money::of('14000.00', 'PLN'), Money::of('280.00', 'PLN')],
+            [12, Money::of('15000.00', 'PLN'), Money::of('300.00', 'PLN')],
+            [12, Money::of('16000.00', 'PLN'), Money::of('320.00', 'PLN')],
+            [12, Money::of('17000.00', 'PLN'), Money::of('340.00', 'PLN')],
+            [12, Money::of('18000.00', 'PLN'), Money::of('360.00', 'PLN')],
+            [12, Money::of('19000.00', 'PLN'), Money::of('380.00', 'PLN')],
+            [12, Money::of('20000.00', 'PLN'), Money::of('400.00', 'PLN')],
+            [24, Money::of( '1000.00', 'PLN'), Money::of( '70.00', 'PLN')],
+            [24, Money::of( '1001.00', 'PLN'), Money::of( '74.00', 'PLN')],
+            [24, Money::of( '1001.50', 'PLN'), Money::of( '73.50', 'PLN')],
+            [24, Money::of( '1001.51', 'PLN'), Money::of( '73.49', 'PLN')],
+            [24, Money::of( '2000.00', 'PLN'), Money::of('100.00', 'PLN')],
+            [24, Money::of( '3000.00', 'PLN'), Money::of('120.00', 'PLN')],
+            [24, Money::of( '4000.00', 'PLN'), Money::of('160.00', 'PLN')],
+            [24, Money::of( '5000.00', 'PLN'), Money::of('200.00', 'PLN')],
+            [24, Money::of( '6000.00', 'PLN'), Money::of('240.00', 'PLN')],
+            [24, Money::of( '7000.00', 'PLN'), Money::of('280.00', 'PLN')],
+            [24, Money::of( '8000.00', 'PLN'), Money::of('320.00', 'PLN')],
+            [24, Money::of( '9000.00', 'PLN'), Money::of('360.00', 'PLN')],
+            [24, Money::of('10000.00', 'PLN'), Money::of('400.00', 'PLN')],
+            [24, Money::of('11000.00', 'PLN'), Money::of('440.00', 'PLN')],
+            [24, Money::of('12000.00', 'PLN'), Money::of('480.00', 'PLN')],
+            [24, Money::of('13000.00', 'PLN'), Money::of('520.00', 'PLN')],
+            [24, Money::of('14000.00', 'PLN'), Money::of('560.00', 'PLN')],
+            [24, Money::of('15000.00', 'PLN'), Money::of('600.00', 'PLN')],
+            [24, Money::of('16000.00', 'PLN'), Money::of('640.00', 'PLN')],
+            [24, Money::of('17000.00', 'PLN'), Money::of('680.00', 'PLN')],
+            [24, Money::of('18000.00', 'PLN'), Money::of('720.00', 'PLN')],
+            [24, Money::of('19000.00', 'PLN'), Money::of('760.00', 'PLN')],
+            [24, Money::of('20000.00', 'PLN'), Money::of('800.00', 'PLN')],
         ];
+        // phpcs:enable
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PragmaGoTech\Interview;
 
+use Brick\Money\Money;
 use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
 
 class LoanFeeBreakpointRepository
@@ -13,47 +14,50 @@ class LoanFeeBreakpointRepository
      */
     public function listAll(): iterable
     {
+        // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
+        // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket
         return [
-            new LoanFeeBreakpoint(12,  1000,  50),
-            new LoanFeeBreakpoint(12,  2000,  90),
-            new LoanFeeBreakpoint(12,  3000,  90),
-            new LoanFeeBreakpoint(12,  4000, 115),
-            new LoanFeeBreakpoint(12,  5000, 100),
-            new LoanFeeBreakpoint(12,  6000, 120),
-            new LoanFeeBreakpoint(12,  7000, 140),
-            new LoanFeeBreakpoint(12,  8000, 160),
-            new LoanFeeBreakpoint(12,  9000, 180),
-            new LoanFeeBreakpoint(12, 10000, 200),
-            new LoanFeeBreakpoint(12, 11000, 220),
-            new LoanFeeBreakpoint(12, 12000, 240),
-            new LoanFeeBreakpoint(12, 13000, 260),
-            new LoanFeeBreakpoint(12, 14000, 280),
-            new LoanFeeBreakpoint(12, 15000, 300),
-            new LoanFeeBreakpoint(12, 16000, 320),
-            new LoanFeeBreakpoint(12, 17000, 340),
-            new LoanFeeBreakpoint(12, 18000, 360),
-            new LoanFeeBreakpoint(12, 19000, 380),
-            new LoanFeeBreakpoint(12, 20000, 400),
-            new LoanFeeBreakpoint(24,  1000,  70),
-            new LoanFeeBreakpoint(24,  2000, 100),
-            new LoanFeeBreakpoint(24,  3000, 120),
-            new LoanFeeBreakpoint(24,  4000, 160),
-            new LoanFeeBreakpoint(24,  5000, 200),
-            new LoanFeeBreakpoint(24,  6000, 240),
-            new LoanFeeBreakpoint(24,  7000, 280),
-            new LoanFeeBreakpoint(24,  8000, 320),
-            new LoanFeeBreakpoint(24,  9000, 360),
-            new LoanFeeBreakpoint(24, 10000, 400),
-            new LoanFeeBreakpoint(24, 11000, 440),
-            new LoanFeeBreakpoint(24, 12000, 480),
-            new LoanFeeBreakpoint(24, 13000, 520),
-            new LoanFeeBreakpoint(24, 14000, 560),
-            new LoanFeeBreakpoint(24, 15000, 600),
-            new LoanFeeBreakpoint(24, 16000, 640),
-            new LoanFeeBreakpoint(24, 17000, 680),
-            new LoanFeeBreakpoint(24, 18000, 720),
-            new LoanFeeBreakpoint(24, 19000, 760),
-            new LoanFeeBreakpoint(24, 20000, 800),
+            new LoanFeeBreakpoint(12, Money::of( 1000, 'PLN'), Money::of( 50, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 2000, 'PLN'), Money::of( 90, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 3000, 'PLN'), Money::of( 90, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 4000, 'PLN'), Money::of(115, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 5000, 'PLN'), Money::of(100, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 6000, 'PLN'), Money::of(120, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 7000, 'PLN'), Money::of(140, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 8000, 'PLN'), Money::of(160, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of( 9000, 'PLN'), Money::of(180, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(10000, 'PLN'), Money::of(200, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(11000, 'PLN'), Money::of(220, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(12000, 'PLN'), Money::of(240, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(13000, 'PLN'), Money::of(260, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(14000, 'PLN'), Money::of(280, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(15000, 'PLN'), Money::of(300, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(16000, 'PLN'), Money::of(320, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(17000, 'PLN'), Money::of(340, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(18000, 'PLN'), Money::of(360, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(19000, 'PLN'), Money::of(380, 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of(20000, 'PLN'), Money::of(400, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 1000, 'PLN'), Money::of( 70, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 2000, 'PLN'), Money::of(100, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 3000, 'PLN'), Money::of(120, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 4000, 'PLN'), Money::of(160, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 5000, 'PLN'), Money::of(200, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 6000, 'PLN'), Money::of(240, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 7000, 'PLN'), Money::of(280, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 8000, 'PLN'), Money::of(320, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of( 9000, 'PLN'), Money::of(360, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(10000, 'PLN'), Money::of(400, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(11000, 'PLN'), Money::of(440, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(12000, 'PLN'), Money::of(480, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(13000, 'PLN'), Money::of(520, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(14000, 'PLN'), Money::of(560, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(15000, 'PLN'), Money::of(600, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(16000, 'PLN'), Money::of(640, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(17000, 'PLN'), Money::of(680, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(18000, 'PLN'), Money::of(720, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(19000, 'PLN'), Money::of(760, 'PLN')),
+            new LoanFeeBreakpoint(24, Money::of(20000, 'PLN'), Money::of(800, 'PLN')),
         ];
+        // phpcs:enable
     }
 }
