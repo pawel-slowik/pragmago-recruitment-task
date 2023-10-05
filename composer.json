@@ -12,6 +12,11 @@
             "PragmaGoTech\\Interview\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "PragmaGoTech\\Interview\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": "^7.4",
         "brick/money": "^0.7.1",
