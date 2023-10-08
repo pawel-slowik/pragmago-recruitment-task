@@ -33,9 +33,7 @@ class LoanFeeCalculator implements FeeCalculator
             $this->loanFeeBreakpointRepository->listAll(),
         );
 
-        $fee = self::interpolate($application, ...$breakpoints);
-
-        return self::round($fee, $application->amount());
+        return self::interpolate($application, ...$breakpoints);
     }
 
     /**
@@ -78,7 +76,7 @@ class LoanFeeCalculator implements FeeCalculator
         if (!isset($left)) {
             throw new LogicException(
                 sprintf(
-                    'can\'t interpolate: left value not found for term = %d and amount = %f',
+                    'can\'t interpolate: left value not found for term = %d and amount = %s',
                     $application->term(),
                     $amount,
                 )
@@ -96,21 +94,5 @@ class LoanFeeCalculator implements FeeCalculator
         $feeDelta = $amountDelta->multipliedBy($coefficient, RoundingMode::HALF_EVEN);
 
         return $left->fee()->plus($feeDelta);
-    }
-
-    private static function round(Money $fee, Money $amount): Money
-    {
-        $total = $amount->plus($fee);
-
-        $totalRoundedUpAmount = $total->getAmount()
-            ->toBigRational()
-            ->dividedBy(5)
-            ->toScale(0, RoundingMode::UP)
-            ->multipliedBy(5);
-        $totalRoundedUp = Money::create($totalRoundedUpAmount, $total->getCurrency(), $total->getContext());
-
-        $fee = $totalRoundedUp->minus($amount);
-
-        return $fee;
     }
 }

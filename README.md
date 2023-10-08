@@ -109,10 +109,6 @@ The fee structure doesn't follow particular algorithm and it is possible that sa
     follow the same signature, i.e. a single point for which the value must be
     interpolated and a data series to use as interpolation base.
 
-- The `LoanFeeCalculator::round` method can also be extracted into a separate
-  service. Since it operates on a result of calculation, it could be a
-  decorator.
-
 - This implementation ignores the aspect of breakpoint uniqueness. It assumes
   that there are no breakpoints with the same amount for a given term. If
   uniqueness handling is necessary, there should be an aggregate entity

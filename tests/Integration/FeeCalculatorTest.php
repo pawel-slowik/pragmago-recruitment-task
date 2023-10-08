@@ -2,25 +2,30 @@
 
 declare(strict_types=1);
 
-namespace PragmaGoTech\Interview\Tests;
+namespace PragmaGoTech\Interview\Tests\Integration;
 
 use Brick\Money\Money;
 use PHPUnit\Framework\TestCase;
-use PragmaGoTech\Interview\LoanFeeCalculator;
+use PragmaGoTech\Interview\FeeCalculator;
+use PragmaGoTech\Interview\FeeRoundingDecorator;
 use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
+use PragmaGoTech\Interview\LoanFeeCalculator;
 use PragmaGoTech\Interview\Model\LoanProposal;
 
 /**
  * @covers \PragmaGoTech\Interview\LoanFeeCalculator
+ * @covers \PragmaGoTech\Interview\FeeRoundingDecorator
  */
-class LoanFeeCalculatorTest extends TestCase
+class FeeCalculatorTest extends TestCase
 {
-    private LoanFeeCalculator $loanFeeCalculator;
+    private FeeCalculator $feeCalculator;
 
     protected function setUp(): void
     {
-        $this->loanFeeCalculator = new LoanFeeCalculator(
-            new LoanFeeBreakpointRepository(),
+        $this->feeCalculator = new FeeRoundingDecorator(
+            new LoanFeeCalculator(
+                new LoanFeeBreakpointRepository(),
+            )
         );
     }
 
@@ -33,7 +38,7 @@ class LoanFeeCalculatorTest extends TestCase
         $proposal->method('term')->willReturn($term);
         $proposal->method('amount')->willReturn($amount);
 
-        $calculatedFee = $this->loanFeeCalculator->calculate($proposal);
+        $calculatedFee = $this->feeCalculator->calculate($proposal);
 
         $this->assertTrue($calculatedFee->isEqualTo($expectedFee));
     }
