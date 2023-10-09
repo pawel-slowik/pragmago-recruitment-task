@@ -102,13 +102,6 @@ The fee structure doesn't follow particular algorithm and it is possible that sa
 
 # Implementation notes
 
-- The `LoanFeeCalculator::interpolate` method can be easily extracted into a
-  separate injectable service.
-  - You can tell that this is going to be easy, because the method is static.
-  - Whatever interpolation strategy you come up with, it is very likely to
-    follow the same signature, i.e. a single point for which the value must be
-    interpolated and a data series to use as interpolation base.
-
 - This implementation ignores the aspect of breakpoint uniqueness. It assumes
   that there are no breakpoints with the same amount for a given term. If
   uniqueness handling is necessary, there should be an aggregate entity

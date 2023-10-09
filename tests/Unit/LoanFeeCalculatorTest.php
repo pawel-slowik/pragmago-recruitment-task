@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace PragmaGoTech\Interview\Tests\Unit;
 
 use Brick\Money\Money;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use PragmaGoTech\Interview\FeeInterpolator;
 use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
 use PragmaGoTech\Interview\LoanFeeCalculator;
 use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
@@ -22,66 +24,45 @@ class LoanFeeCalculatorTest extends TestCase
     /** @var LoanFeeBreakpointRepository&Stub */
     private LoanFeeBreakpointRepository $loanFeeBreakpointRepository;
 
+    /** @var FeeInterpolator&MockObject */
+    private FeeInterpolator $feeInterpolator;
+
     protected function setUp(): void
     {
         $this->loanFeeBreakpointRepository = $this->createStub(LoanFeeBreakpointRepository::class);
+        $this->feeInterpolator = $this->createMock(FeeInterpolator::class);
         $this->loanFeeCalculator = new LoanFeeCalculator(
             $this->loanFeeBreakpointRepository,
+            $this->feeInterpolator,
         );
     }
 
-    /**
-     * @dataProvider calculatedFeeDataProvider
-     */
-    public function testCalculatedFee(int $term, Money $amount, Money $expectedFee): void
+    public function testCalculation(): void
     {
-        // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
-        // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket
+        $proposal = $this->createStub(LoanProposal::class);
+        $proposal->method('term')->willReturn(12);
+        $proposal->method('amount')->willReturn(Money::of('1.23', 'PLN'));
+
+        $breakpoints = [
+            new LoanFeeBreakpoint(12, Money::of('5.00', 'PLN'), Money::of('0.25', 'PLN')),
+            new LoanFeeBreakpoint(12, Money::of('7.00', 'PLN'), Money::of('0.33', 'PLN')),
+        ];
+
         $this->loanFeeBreakpointRepository
             ->method('listForTerm')
-            ->willReturnMap(
-                [
-                    [
-                        12,
-                        [
-                            new LoanFeeBreakpoint(12, Money::of('100.00', 'PLN'), Money::of( '2.00', 'PLN')),
-                            new LoanFeeBreakpoint(12, Money::of('200.00', 'PLN'), Money::of( '3.00', 'PLN')),
-                            new LoanFeeBreakpoint(12, Money::of('300.00', 'PLN'), Money::of( '5.00', 'PLN')),
-                            new LoanFeeBreakpoint(12, Money::of('500.00', 'PLN'), Money::of( '9.00', 'PLN')),
-                        ],
-                    ],
-                    [
-                        24,
-                        [
-                            new LoanFeeBreakpoint(24, Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')),
-                            new LoanFeeBreakpoint(24, Money::of('300.00', 'PLN'), Money::of( '7.00', 'PLN')),
-                            new LoanFeeBreakpoint(24, Money::of('200.00', 'PLN'), Money::of( '4.50', 'PLN')),
-                            new LoanFeeBreakpoint(24, Money::of('100.00', 'PLN'), Money::of( '3.00', 'PLN')),
-                        ],
-                    ],
-                ]
-            );
-        // phpcs:enable
+            ->willReturn($breakpoints);
 
-        $proposal = $this->createStub(LoanProposal::class);
-        $proposal->method('term')->willReturn($term);
-        $proposal->method('amount')->willReturn($amount);
+        $this->feeInterpolator
+            ->expects($this->once())
+            ->method('interpolate')
+            ->with(
+                $proposal,
+                ...$breakpoints
+            )
+            ->willReturn(Money::of('6.00', 'PLN'));
 
         $calculatedFee = $this->loanFeeCalculator->calculate($proposal);
 
-        $this->assertTrue($calculatedFee->isEqualTo($expectedFee));
-    }
-
-    /**
-     * @return array<array{0: int, 1: Money, 2: Money}>
-     */
-    public function calculatedFeeDataProvider(): array
-    {
-        return [
-            [12, Money::of('200.00', 'PLN'), Money::of('3.00', 'PLN')],
-            [24, Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')],
-            [24, Money::of('400.00', 'PLN'), Money::of('9.00', 'PLN')],
-            [24, Money::of('433.00', 'PLN'), Money::of('9.66', 'PLN')],
-        ];
+        $this->assertTrue($calculatedFee->isEqualTo(Money::of('6.00', 'PLN')));
     }
 }

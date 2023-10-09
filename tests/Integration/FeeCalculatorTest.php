@@ -7,14 +7,16 @@ namespace PragmaGoTech\Interview\Tests\Integration;
 use Brick\Money\Money;
 use PHPUnit\Framework\TestCase;
 use PragmaGoTech\Interview\FeeCalculator;
+use PragmaGoTech\Interview\FeeInterpolator;
 use PragmaGoTech\Interview\FeeRoundingDecorator;
 use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
 use PragmaGoTech\Interview\LoanFeeCalculator;
 use PragmaGoTech\Interview\Model\LoanProposal;
 
 /**
- * @covers \PragmaGoTech\Interview\LoanFeeCalculator
+ * @covers \PragmaGoTech\Interview\FeeInterpolator
  * @covers \PragmaGoTech\Interview\FeeRoundingDecorator
+ * @covers \PragmaGoTech\Interview\LoanFeeCalculator
  */
 class FeeCalculatorTest extends TestCase
 {
@@ -25,6 +27,7 @@ class FeeCalculatorTest extends TestCase
         $this->feeCalculator = new FeeRoundingDecorator(
             new LoanFeeCalculator(
                 new LoanFeeBreakpointRepository(),
+                new FeeInterpolator(),
             )
         );
     }
