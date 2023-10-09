@@ -32,17 +32,17 @@ class LoanFeeCalculator implements FeeCalculator
             $breakpoints = iterator_to_array($breakpoints);
         }
 
-        usort(
-            $breakpoints,
-            fn (LoanFeeBreakpoint $a, LoanFeeBreakpoint $b): int => $a->amount() <=> $b->amount(),
-        );
-
         return self::interpolate($application, ...$breakpoints);
     }
 
     private static function interpolate(LoanProposal $application, LoanFeeBreakpoint ...$breakpointSeries): Money
     {
         $amount = $application->amount();
+
+        usort(
+            $breakpointSeries,
+            fn (LoanFeeBreakpoint $a, LoanFeeBreakpoint $b): int => $a->amount() <=> $b->amount(),
+        );
 
         foreach ($breakpointSeries as $breakpoint) {
             if ($breakpoint->amount()->isLessThanOrEqualTo($amount)) {
