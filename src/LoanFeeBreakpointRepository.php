@@ -12,6 +12,18 @@ class LoanFeeBreakpointRepository
     /**
      * @return iterable<LoanFeeBreakpoint>
      */
+    public function listForTerm(int $term): iterable
+    {
+        foreach ($this->listAll() as $breakpoint) {
+            if ($breakpoint->term() === $term) {
+                yield $breakpoint;
+            }
+        }
+    }
+
+    /**
+     * @return iterable<LoanFeeBreakpoint>
+     */
     public function listAll(): iterable
     {
         // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket

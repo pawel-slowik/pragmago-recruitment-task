@@ -10,7 +10,6 @@ use LogicException;
 use PragmaGoTech\Interview\Model\LoanProposal;
 use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
 
-use function array_filter;
 use function iterator_to_array;
 use function is_array;
 use function sprintf;
@@ -28,36 +27,17 @@ class LoanFeeCalculator implements FeeCalculator
 
     public function calculate(LoanProposal $application): Money
     {
-        $breakpoints = self::getSeries(
-            $application->term(),
-            $this->loanFeeBreakpointRepository->listAll(),
-        );
-
-        return self::interpolate($application, ...$breakpoints);
-    }
-
-    /**
-     * @param iterable<LoanFeeBreakpoint> $breakpoints
-     *
-     * @return array<LoanFeeBreakpoint>
-     */
-    private static function getSeries(int $term, iterable $breakpoints): array
-    {
+        $breakpoints = $this->loanFeeBreakpointRepository->listForTerm($application->term());
         if (!is_array($breakpoints)) {
             $breakpoints = iterator_to_array($breakpoints);
         }
-
-        $breakpoints = array_filter(
-            $breakpoints,
-            fn (LoanFeeBreakpoint $breakpoint): bool => $breakpoint->term() === $term,
-        );
 
         usort(
             $breakpoints,
             fn (LoanFeeBreakpoint $a, LoanFeeBreakpoint $b): int => $a->amount() <=> $b->amount(),
         );
 
-        return $breakpoints;
+        return self::interpolate($application, ...$breakpoints);
     }
 
     private static function interpolate(LoanProposal $application, LoanFeeBreakpoint ...$breakpointSeries): Money

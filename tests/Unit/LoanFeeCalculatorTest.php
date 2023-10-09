@@ -38,17 +38,27 @@ class LoanFeeCalculatorTest extends TestCase
         // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
         // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket
         $this->loanFeeBreakpointRepository
-            ->method('listAll')
-            ->willReturn(
+            ->method('listForTerm')
+            ->willReturnMap(
                 [
-                    new LoanFeeBreakpoint(12, Money::of('100.00', 'PLN'), Money::of( '2.00', 'PLN')),
-                    new LoanFeeBreakpoint(12, Money::of('200.00', 'PLN'), Money::of( '3.00', 'PLN')),
-                    new LoanFeeBreakpoint(12, Money::of('300.00', 'PLN'), Money::of( '5.00', 'PLN')),
-                    new LoanFeeBreakpoint(12, Money::of('500.00', 'PLN'), Money::of( '9.00', 'PLN')),
-                    new LoanFeeBreakpoint(24, Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')),
-                    new LoanFeeBreakpoint(24, Money::of('300.00', 'PLN'), Money::of( '7.00', 'PLN')),
-                    new LoanFeeBreakpoint(24, Money::of('200.00', 'PLN'), Money::of( '4.50', 'PLN')),
-                    new LoanFeeBreakpoint(24, Money::of('100.00', 'PLN'), Money::of( '3.00', 'PLN')),
+                    [
+                        12,
+                        [
+                            new LoanFeeBreakpoint(12, Money::of('100.00', 'PLN'), Money::of( '2.00', 'PLN')),
+                            new LoanFeeBreakpoint(12, Money::of('200.00', 'PLN'), Money::of( '3.00', 'PLN')),
+                            new LoanFeeBreakpoint(12, Money::of('300.00', 'PLN'), Money::of( '5.00', 'PLN')),
+                            new LoanFeeBreakpoint(12, Money::of('500.00', 'PLN'), Money::of( '9.00', 'PLN')),
+                        ],
+                    ],
+                    [
+                        24,
+                        [
+                            new LoanFeeBreakpoint(24, Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')),
+                            new LoanFeeBreakpoint(24, Money::of('300.00', 'PLN'), Money::of( '7.00', 'PLN')),
+                            new LoanFeeBreakpoint(24, Money::of('200.00', 'PLN'), Money::of( '4.50', 'PLN')),
+                            new LoanFeeBreakpoint(24, Money::of('100.00', 'PLN'), Money::of( '3.00', 'PLN')),
+                        ],
+                    ],
                 ]
             );
         // phpcs:enable
