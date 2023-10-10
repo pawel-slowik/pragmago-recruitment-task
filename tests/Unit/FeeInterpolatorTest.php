@@ -7,7 +7,7 @@ namespace PragmaGoTech\Interview\Tests\Unit;
 use Brick\Money\Money;
 use PHPUnit\Framework\TestCase;
 use PragmaGoTech\Interview\FeeInterpolator;
-use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
+use PragmaGoTech\Interview\Model\FeeBreakpoint;
 use PragmaGoTech\Interview\Model\LoanProposal;
 
 /**
@@ -25,7 +25,7 @@ class FeeInterpolatorTest extends TestCase
     /**
      * @dataProvider interpolationDataProvider
      *
-     * @param LoanFeeBreakpoint[] $breakpoints
+     * @param FeeBreakpoint[] $breakpoints
      */
     public function testInterpolation(array $breakpoints, Money $amount, Money $expectedValue): void
     {
@@ -39,17 +39,17 @@ class FeeInterpolatorTest extends TestCase
     }
 
     /**
-     * @return array<array{0: array<LoanFeeBreakpoint>, 1: Money, 2: Money}>
+     * @return array<array{0: array<FeeBreakpoint>, 1: Money, 2: Money}>
      */
     public function interpolationDataProvider(): array
     {
         // phpcs:disable PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket
         // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket
         $breakpoints = [
-            new LoanFeeBreakpoint(24, Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')),
-            new LoanFeeBreakpoint(24, Money::of('300.00', 'PLN'), Money::of( '7.00', 'PLN')),
-            new LoanFeeBreakpoint(24, Money::of('200.00', 'PLN'), Money::of( '4.50', 'PLN')),
-            new LoanFeeBreakpoint(24, Money::of('100.00', 'PLN'), Money::of( '3.00', 'PLN')),
+            new FeeBreakpoint(Money::of('500.00', 'PLN'), Money::of('11.00', 'PLN')),
+            new FeeBreakpoint(Money::of('300.00', 'PLN'), Money::of( '7.00', 'PLN')),
+            new FeeBreakpoint(Money::of('200.00', 'PLN'), Money::of( '4.50', 'PLN')),
+            new FeeBreakpoint(Money::of('100.00', 'PLN'), Money::of( '3.00', 'PLN')),
         ];
         // phpcs:enable
 

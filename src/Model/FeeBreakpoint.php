@@ -6,24 +6,16 @@ namespace PragmaGoTech\Interview\Model;
 
 use Brick\Money\Money;
 
-class LoanFeeBreakpoint
+class FeeBreakpoint
 {
-    private int $term;
-
     private Money $amount;
 
     private Money $fee;
 
-    public function __construct(int $term, Money $amount, Money $fee)
+    public function __construct(Money $amount, Money $fee)
     {
-        $this->term = $term;
         $this->amount = $amount;
         $this->fee = $fee;
-    }
-
-    public function term(): int
-    {
-        return $this->term;
     }
 
     public function amount(): Money

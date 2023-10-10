@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use PragmaGoTech\Interview\FeeCalculator;
 use PragmaGoTech\Interview\FeeInterpolator;
 use PragmaGoTech\Interview\FeeRoundingDecorator;
-use PragmaGoTech\Interview\LoanFeeBreakpointRepository;
+use PragmaGoTech\Interview\FeeStructureRepository;
 use PragmaGoTech\Interview\LoanFeeCalculator;
 use PragmaGoTech\Interview\Model\LoanProposal;
 
@@ -26,7 +26,7 @@ class FeeCalculatorTest extends TestCase
     {
         $this->feeCalculator = new FeeRoundingDecorator(
             new LoanFeeCalculator(
-                new LoanFeeBreakpointRepository(),
+                new FeeStructureRepository(),
                 new FeeInterpolator(),
             )
         );

@@ -12,21 +12,22 @@ use function is_array;
 
 class LoanFeeCalculator implements FeeCalculator
 {
-    private LoanFeeBreakpointRepository $loanFeeBreakpointRepository;
+    private FeeStructureRepository $feeStructureRepository;
 
     private FeeInterpolator $feeInterpolator;
 
     public function __construct(
-        LoanFeeBreakpointRepository $loanFeeBreakpointRepository,
+        FeeStructureRepository $feeStructureRepository,
         FeeInterpolator $feeInterpolator
     ) {
-        $this->loanFeeBreakpointRepository = $loanFeeBreakpointRepository;
+        $this->feeStructureRepository = $feeStructureRepository;
         $this->feeInterpolator = $feeInterpolator;
     }
 
     public function calculate(LoanProposal $application): Money
     {
-        $breakpoints = $this->loanFeeBreakpointRepository->listForTerm($application->term());
+        $structure = $this->feeStructureRepository->getForTerm($application->term());
+        $breakpoints = $structure->breakpoints();
         if (!is_array($breakpoints)) {
             $breakpoints = iterator_to_array($breakpoints);
         }

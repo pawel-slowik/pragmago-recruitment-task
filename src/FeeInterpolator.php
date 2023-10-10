@@ -8,20 +8,20 @@ use Brick\Math\RoundingMode;
 use Brick\Money\Money;
 use LogicException;
 use PragmaGoTech\Interview\Model\LoanProposal;
-use PragmaGoTech\Interview\Model\LoanFeeBreakpoint;
+use PragmaGoTech\Interview\Model\FeeBreakpoint;
 
 use function sprintf;
 use function usort;
 
 class FeeInterpolator
 {
-    public function interpolate(LoanProposal $application, LoanFeeBreakpoint ...$breakpointSeries): Money
+    public function interpolate(LoanProposal $application, FeeBreakpoint ...$breakpointSeries): Money
     {
         $amount = $application->amount();
 
         usort(
             $breakpointSeries,
-            fn (LoanFeeBreakpoint $a, LoanFeeBreakpoint $b): int => $a->amount() <=> $b->amount(),
+            fn (FeeBreakpoint $a, FeeBreakpoint $b): int => $a->amount() <=> $b->amount(),
         );
 
         foreach ($breakpointSeries as $breakpoint) {

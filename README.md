@@ -102,12 +102,4 @@ The fee structure doesn't follow particular algorithm and it is possible that sa
 
 # Implementation notes
 
-- This implementation ignores the aspect of breakpoint uniqueness. It assumes
-  that there are no breakpoints with the same amount for a given term. If
-  uniqueness handling is necessary, there should be an aggregate entity
-  responsible for storing and listing breakpoints. This entity could be called
-  `LoanFeeStructure`. It would guarantee breakpoint uniqueness by providing a
-  duplicate-safe `addBreakpoint` method. The calculator would then retrieve
-  appropriate structure for given proposal and iterate on its breakpoints.
-
 - Never use floating point arithmetic for money calculations.
